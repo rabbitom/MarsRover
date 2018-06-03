@@ -8,8 +8,7 @@ function Rover() {
     //status
     this.rip = false;
     //check functions
-    this.canMoveTo;
-    this.willRip;
+    this.task;
 }
 
 Rover.prototype.move = function() {
@@ -19,15 +18,15 @@ Rover.prototype.move = function() {
             break;
     }
     var pos = `${this.x} ${this.y} ${this.direction}`;
-    this.rip ? ('RIP' + pos) : pos;
+    return this.rip ? (pos + ' RIP') : pos;
 }
 
 //execute one command
 Rover.prototype.exec = function(command) {
     if (command == 'M') {
         var newPos = this.moveForward();
-        if (this.canMoveTo(newPos)) {
-            if (this.willRip(newPos)) {
+        if (this.task.canMoveTo(newPos)) {
+            if (this.task.willRip(newPos)) {
                 this.rip = true;
             } else {
                 this.x = newPos.x;
@@ -131,8 +130,7 @@ MarsRovers.prototype.init = function(input) {
         rover.y = parseInt(positionMatch[2]);
         rover.direction = positionMatch[3];
         rover.commands = commands;
-        rover.canMoveTo = this.canMoveTo;
-        rover.willRip = this.willRip;
+        rover.task = this;
         this.rovers.push(rover);
     }
 }

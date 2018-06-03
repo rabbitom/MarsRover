@@ -35,13 +35,15 @@ describe('rover-moveforward', function() {
 });
 
 describe('check-before-move', function() {
+    var task = new MarsRovers();
+    task.willRip = function() { return false };
     var r = new Rover();
     r.x = 2;
     r.y = 2;
     r.direction = 'N';
-    r.willRip = function() { return false };
+    r.task = task;
     it('can not move', function() {
-        r.canMoveTo = function(pos) {
+        task.canMoveTo = function(pos) {
             return false;
         };
         r.exec('M');
@@ -49,7 +51,7 @@ describe('check-before-move', function() {
         should(r.y).equal(2);
     });
     it('can move', function() {
-        r.canMoveTo = function(pos) {
+        task.canMoveTo = function(pos) {
             return true;
         };
         r.exec('M');
@@ -59,25 +61,27 @@ describe('check-before-move', function() {
 })
 
 describe('check-after-move', function() {
+    var task = new MarsRovers();
+    task.canMoveTo = function(pos) {
+        return true;
+    };
     var r;
     beforeEach(function() {
         r = new Rover();
         r.x = 2;
         r.y = 2;
         r.direction = 'N';
-        r.canMoveTo = function(pos) {
-            return true;
-        };
+        r.task = task;
     });
     it('will rip', function() {
-        r.willRip = function() { return true };
+        task.willRip = function() { return true };
         r.exec('M');
         should(r.x).equal(2);
         should(r.y).equal(2);
         should(r.rip).equal(true);
     });
     it('will not rip', function() {
-        r.willRip = function() { return false };
+        task.willRip = function() { return false };
         r.exec('M');
         should(r.x).equal(2);
         should(r.y).equal(3);
@@ -108,25 +112,45 @@ describe('can-move-to', function() {
     });
 });
 
-describe('move', function() {
-    const input = [
-        '5 5',
-        '1 2 N',
-        'LMLMLMLMM',
-        '3 3 E',
-        'MMRMMLMRRM',
-        '4 1 S',
-        'MLMLMRMRM'
-    ];
-    const expected = [
-        '1 3 N',
-        '5 1 E RIP',
-        '5 0 S'
-    ];
-    var task = new MarsRovers();
-    task.init(input);
-    var output = task.move();
-    should(output.length).equal(expected.length);
-    for (var i = 0; i < output.length; i++)
-        should(output[i]).equal(expected[i]);
-})
+describe('end-to-end', function() {
+    var task;
+    beforeEach(function() {
+        task = new MarsRovers();
+    });
+    it('2', function() {
+        const input = [
+            '5 5',
+            '3 3 E',
+            'MMRMMLMRRM'
+        ];
+        const expected = [
+            '5 1 E RIP'
+        ];
+        task.init(input);
+        var output = task.move();
+        should(output.length).equal(expected.length);
+        for (var i = 0; i < output.length; i++)
+            should(output[i]).equal(expected[i]);
+    });
+    it('all', function() {
+        const input = [
+            '5 5',
+            '1 2 N',
+            'LMLMLMLMM',
+            '3 3 E',
+            'MMRMMLMRRM',
+            '4 1 S',
+            'MLMLMRMRM'
+        ];
+        const expected = [
+            '1 3 N',
+            '5 1 E RIP',
+            '5 0 S'
+        ];
+        task.init(input);
+        var output = task.move();
+        should(output.length).equal(expected.length);
+        for (var i = 0; i < output.length; i++)
+            should(output[i]).equal(expected[i]);
+    });
+});
