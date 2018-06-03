@@ -71,7 +71,7 @@ Rover.prototype.moveForward = function() {
     return newPos;
 }
 
-function MarsRovers() {
+function MarsTask() {
     //size of the plateau
     this.size = { x: 0, y: 0 };
     //rovers
@@ -80,7 +80,7 @@ function MarsRovers() {
     this.blackholes = [];
 }
 
-MarsRovers.prototype.canMoveTo = function(pos) {
+MarsTask.prototype.canMoveTo = function(pos) {
     for (var hole of this.blackholes) {
         if ((pos.x === hole.x) && (pos.y === hole.y))
             return false;
@@ -88,14 +88,14 @@ MarsRovers.prototype.canMoveTo = function(pos) {
     return true;
 }
 
-MarsRovers.prototype.willRip = function(pos) {
+MarsTask.prototype.willRip = function(pos) {
     var rip = (pos.y < 0) || (pos.y > this.size.y) || (pos.x < 0) || (pos.x > this.size.x);
     if (rip)
         this.blackholes.push(pos);
     return rip;
 }
 
-MarsRovers.prototype.init = function(input) {
+MarsTask.prototype.init = function(input) {
     if (!(input instanceof Array))
         throw 'unexpected input, should be an array';
     if (input.length == 0)
@@ -135,7 +135,7 @@ MarsRovers.prototype.init = function(input) {
     }
 }
 
-MarsRovers.prototype.move = function() {
+MarsTask.prototype.move = function() {
     var result = [];
     for (var rover of this.rovers) {
         try {
@@ -151,5 +151,5 @@ MarsRovers.prototype.move = function() {
 
 module.exports = {
     'Rover': Rover,
-    'MarsRovers': MarsRovers
+    'MarsTask': MarsTask
 };

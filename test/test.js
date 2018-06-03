@@ -2,7 +2,7 @@ const mars = require('../index.js');
 const should = require('should');
 
 const Rover = mars.Rover;
-const MarsRovers = mars.MarsRovers;
+const MarsTask = mars.MarsTask;
 
 describe('rover-moveforward', function() {
     var r = new Rover();
@@ -35,7 +35,7 @@ describe('rover-moveforward', function() {
 });
 
 describe('check-before-move', function() {
-    var task = new MarsRovers();
+    var task = new MarsTask();
     task.willRip = function() { return false };
     var r = new Rover();
     r.x = 2;
@@ -61,7 +61,7 @@ describe('check-before-move', function() {
 })
 
 describe('check-after-move', function() {
-    var task = new MarsRovers();
+    var task = new MarsTask();
     task.canMoveTo = function(pos) {
         return true;
     };
@@ -90,7 +90,7 @@ describe('check-after-move', function() {
 });
 
 describe('task-will-rip', function() {
-    var task = new MarsRovers();
+    var task = new MarsTask();
     task.size.x = 5;
     task.size.y = 5;
     it('will rip x', function() {
@@ -105,7 +105,7 @@ describe('task-will-rip', function() {
 });
 
 describe('can-move-to', function() {
-    var task = new MarsRovers();
+    var task = new MarsTask();
     task.blackholes = [{ x: 2, y: 2 }];
     it('can not move', function() {
         should(task.canMoveTo({ x: 2, y: 2 })).false();
@@ -118,7 +118,7 @@ describe('can-move-to', function() {
 describe('end-to-end', function() {
     var task;
     beforeEach(function() {
-        task = new MarsRovers();
+        task = new MarsTask();
     });
     it('should rip', function() {
         const input = [
