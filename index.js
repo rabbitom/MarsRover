@@ -1,7 +1,4 @@
 function Rover() {
-    //size of the plateau
-    this.xMax = 0;
-    this.yMax = 0;
     //current position and direction
     this.x = 0;
     this.y = 0;
@@ -11,8 +8,8 @@ function Rover() {
     //status
     this.rip = false;
     //check functions
-    this.checkBeacon;
-    this.checkResult;
+    this.canMoveTo;
+    this.willRip;
 }
 
 Rover.prototype.move = function() {
@@ -21,14 +18,23 @@ Rover.prototype.move = function() {
         if (this.rip)
             break;
     }
-    return this.rip ? 'RIP' : `${this.x} ${this.y} ${this.direction}`;
+    var pos = `${this.x} ${this.y} ${this.direction}`;
+    this.rip ? ('RIP' + pos) : pos;
 }
 
 //execute one command
 Rover.prototype.exec = function(command) {
-    if (command == 'M')
-        this.moveForward();
-    else
+    if (command == 'M') {
+        var newPos = this.moveForward();
+        if (this.canMoveTo(newPos)) {
+            if (this.willRip(newPos)) {
+                this.rip = true;
+            } else {
+                this.x = newPos.x;
+                this.y = newPos.y;
+            }
+        }
+    } else
         this.turn(command);
 }
 
@@ -63,7 +69,6 @@ Rover.prototype.moveForward = function() {
             newPos.x -= 1;
             break;
     }
-    //this.rip = (this.y < 0) || (this.y > this.yMax) || (this.x < 0) || (this.x > this.xMax);
     return newPos;
 }
 
@@ -72,6 +77,23 @@ function MarsRovers() {
     this.size = { x: 0, y: 0 };
     //rovers
     this.rovers = [];
+    //beacons
+    this.blackholes = [];
+}
+
+MarsRovers.prototype.canMoveTo = function(pos) {
+    for (var hole of this.blackholes) {
+        if ((pos.x === hole.x) && (pos.y === hole.y))
+            return false;
+    }
+    return true;
+}
+
+MarsRovers.prototype.willRip = function(pos) {
+    var rip = (pos.y < 0) || (pos.y > this.size.y) || (this.x < 0) || (this.x > this.size.x);
+    if (rip)
+        this.blackholes.push(pos);
+    return rip;
 }
 
 MarsRovers.prototype.init = function(input) {
@@ -105,12 +127,12 @@ MarsRovers.prototype.init = function(input) {
             continue;
         }
         var rover = new Rover();
-        rover.xMax = x;
-        rover.yMax = y;
         rover.x = parseInt(positionMatch[1]);
         rover.y = parseInt(positionMatch[2]);
         rover.direction = positionMatch[3];
         rover.commands = commands;
+        rover.canMoveTo = this.canMoveTo;
+        rover.willRip = this.willRip;
         this.rovers.push(rover);
     }
 }
