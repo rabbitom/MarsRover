@@ -10,6 +10,9 @@ function Rover() {
     this.commands = '';
     //status
     this.rip = false;
+    //check functions
+    this.checkBeacon;
+    this.checkResult;
 }
 
 Rover.prototype.move = function() {
@@ -45,21 +48,23 @@ Rover.prototype.turn = function(turnDirection) {
 }
 
 Rover.prototype.moveForward = function() {
+    var newPos = { x: this.x, y: this.y };
     switch (this.direction) {
         case 'N':
-            this.y += 1;
+            newPos.y += 1;
             break;
         case 'E':
-            this.x += 1;
+            newPos.x += 1;
             break;
         case 'S':
-            this.y -= 1;
+            newPos.y -= 1;
             break;
         case 'W':
-            this.x -= 1;
+            newPos.x -= 1;
             break;
     }
-    this.rip = (this.y < 0) || (this.y > this.yMax) || (this.x < 0) || (this.x > this.xMax);
+    //this.rip = (this.y < 0) || (this.y > this.yMax) || (this.x < 0) || (this.x > this.xMax);
+    return newPos;
 }
 
 function MarsRovers() {
@@ -124,4 +129,7 @@ MarsRovers.prototype.move = function() {
     return result;
 }
 
-module.exports = MarsRovers;
+module.exports = {
+    'Rover': Rover,
+    'MarsRovers': MarsRovers
+};
