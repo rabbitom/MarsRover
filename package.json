@@ -1,18 +1,21 @@
 {
-  "name": "marsrover",
-  "version": "1.0.0",
-  "description": "Move a squad of robotic rovers on mars.",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha"
-  },
-  "keywords": [
-    "ThoughtWorks"
-  ],
-  "author": "Tom Hao",
-  "license": "ISC",
-  "devDependencies": {
-    "mocha": "^5.2.0",
-    "should": "^13.2.1"
-  }
+    "name": "marsrover",
+    "version": "1.0.0",
+    "description": "Move a squad of robotic rovers on mars.",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha --require babel-register"
+    },
+    "keywords": [
+        "ThoughtWorks"
+    ],
+    "author": "Tom Hao",
+    "license": "ISC",
+    "devDependencies": {
+        "babel-register": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-preset-env": "^1.7.0",
+        "mocha": "^5.2.0",
+        "should": "^13.2.1"
+    }
 }

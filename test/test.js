@@ -1,8 +1,5 @@
-const mars = require('../index.js');
-const should = require('should');
-
-const Rover = mars.Rover;
-const MarsTask = mars.MarsTask;
+import { Rover, MarsTask } from "../index.js";
+import should from "should";
 
 describe('rover-moveforward', function() {
     var r = new Rover();
