@@ -89,7 +89,7 @@ MarsRovers.prototype.canMoveTo = function(pos) {
 }
 
 MarsRovers.prototype.willRip = function(pos) {
-    var rip = (pos.y < 0) || (pos.y > this.size.y) || (this.x < 0) || (this.x > this.size.x);
+    var rip = (pos.y < 0) || (pos.y > this.size.y) || (pos.x < 0) || (pos.x > this.size.x);
     if (rip)
         this.blackholes.push(pos);
     return rip;

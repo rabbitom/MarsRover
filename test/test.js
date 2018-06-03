@@ -93,7 +93,10 @@ describe('task-will-rip', function() {
     var task = new MarsRovers();
     task.size.x = 5;
     task.size.y = 5;
-    it('will rip', function() {
+    it('will rip x', function() {
+        should(task.willRip({ x: 6, y: 5 })).true();
+    });
+    it('will rip y', function() {
         should(task.willRip({ x: 5, y: 6 })).true();
     });
     it('will not rip', function() {
@@ -117,7 +120,7 @@ describe('end-to-end', function() {
     beforeEach(function() {
         task = new MarsRovers();
     });
-    it('2', function() {
+    it('should rip', function() {
         const input = [
             '5 5',
             '3 3 E',
